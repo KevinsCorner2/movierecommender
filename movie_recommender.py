@@ -1,4 +1,5 @@
 import pandas as pd
+import random
 
 class MovieRecommender:
     def __init__(self, data_path="movies.csv"):
@@ -22,3 +23,14 @@ class MovieRecommender:
             return "No ratings yet! Rate some movies first."
         top_movies = sorted(self.user_ratings.items(), key=lambda x: x[1], reverse=True)[:3]
         return [m[0] for m in top_movies]
+
+    def get_random_movie(self):
+        """Return a random movie from the dataset."""
+        random_movie = self.movies.sample(n=1).iloc[0]  # Get a random movie from the dataset
+        return {
+            "title": random_movie["title"],
+            "year": random_movie["year"],
+            "rating": random_movie["rating"],
+            "description": random_movie["description"],
+            "poster_path": random_movie["poster_path"]  # Assuming there's a 'poster_path' column
+        }

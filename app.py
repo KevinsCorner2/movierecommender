@@ -67,8 +67,42 @@ with tab5:
     if st.button("Give me a movie!"):
         movie = get_random_movie()
         if movie:
+            # Convert vote average to percentage
+            vote_percentage = movie['vote_average'] * 10  # Convert to percentage (0-100)
+            
+            # Display movie details
             st.image(f"https://image.tmdb.org/t/p/w500{movie['poster_path']}")
-            st.write(f"🎬 **{movie['title']} ({movie['release_date'][:4]})** - ⭐ {movie['vote_average'] / 10}")
+            st.write(f"🎬 **{movie['title']} ({movie['release_date'][:4]})** - ⭐ {vote_percentage:.1f}%")
             st.write(movie["overview"])
+            
+            # Display Watch Providers (Stream, Buy, Rent)
+            if movie.get("watch_providers"):
+                providers = movie["watch_providers"].get("US", {})
+                streaming = providers.get("flatrate", [])
+                rent = providers.get("rent", [])
+                buy = providers.get("buy", [])
+                
+                st.write("🔮 Available on:")
+                
+                if streaming:
+                    st.write("**Streaming:**")
+                    for provider in streaming:
+                        st.write(f"- {provider['provider_name']}")
+                if rent:
+                    st.write("**Available to Rent:**")
+                    for provider in rent:
+                        st.write(f"- {provider['provider_name']}")
+                if buy:
+                    st.write("**Available to Buy:**")
+                    for provider in buy:
+                        st.write(f"- {provider['provider_name']}")
+            
+            # Display Top-Billed Cast
+            if movie.get("cast"):
+                st.write("👨‍👩‍👧‍👦 Top Cast:")
+                for cast_member in movie["cast"]:
+                    st.image(f"https://image.tmdb.org/t/p/w500{cast_member['profile_path']}", width=50)
+                    st.write(f"**{cast_member['name']}** as {cast_member['character']}")
         else:
             st.write("Couldn't fetch a random movie.")
+
