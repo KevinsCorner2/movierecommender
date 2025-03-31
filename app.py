@@ -68,7 +68,7 @@ with tab5:
         movie = get_random_movie()
         if movie:
             st.image(f"https://image.tmdb.org/t/p/w500{movie['poster_path']}")
-            st.write(f"🎬 **{movie['title']} ({movie['release_date'][:4]})** - ⭐ {movie['vote_average']}")
+            st.write(f"🎬 **{movie['title']} ({movie['release_date'][:4]})** - ⭐ {movie['vote_average'] / 10}")
             st.write(movie["overview"])
         else:
             st.write("Couldn't fetch a random movie.")
