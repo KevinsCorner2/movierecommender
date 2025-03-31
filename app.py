@@ -1,6 +1,7 @@
 import streamlit as st
 from movie_recommender import MovieRecommender
 from tmdb_api import search_movie, get_similar_movies, get_random_movie
+
 st.title("🎬 Smart Movie Recommender")
 
 # Initialize movie recommender
