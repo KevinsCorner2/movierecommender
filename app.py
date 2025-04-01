@@ -65,12 +65,19 @@ with tab2:
 # 🎥 Genre-Based Recommendations
 with tab3:
     st.subheader("Recommend Movies by Genre")
-    genre = st.selectbox("Select a Genre", ["Sci-Fi", "Action", "Romance", "Thriller"])
+    genre = st.selectbox("Select a Genre", [
+        "Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", 
+        "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery", 
+        "Romance", "Science Fiction", "Thriller", "TV Movie", "War", "Western"
+    ])
     if st.button("Get Genre Recommendations"):
         movies = recommender.recommend_by_genre(genre)
         for _, row in movies.iterrows():
-            st.write(f"🎬 **{row['title']} ({row['year']})** - ⭐ {row['rating']}")
+            # Display movie details (including rating as percentage)
+            rating_percentage = row["rating"] * 10  # Convert rating to percentage
+            st.write(f"🎬 **{row['title']} ({row['year']})** - ⭐ {rating_percentage}%")
             st.write(row["description"])
+
 
 # ⭐ User Ratings & Reviews
 with tab4:
