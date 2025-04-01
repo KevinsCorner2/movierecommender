@@ -1,6 +1,6 @@
 import streamlit as st
 from movie_recommender import MovieRecommender
-from tmdb_api import search_movie, get_similar_movies, get_random_movie
+from tmdb_api import search_movie, get_similar_movies, get_random_movie, get_movies_by_genre
 
 st.title("🎬 Smart Movie Recommender")
 
@@ -17,34 +17,46 @@ with tab1:
     if st.button("Search"):
         movie = search_movie(movie_name)
         if movie:
-            # Display movie poster
-            st.image(f"https://image.tmdb.org/t/p/w500{movie['poster_path']}")
+            col1, col2 = st.columns([1, 2])
+            with col1:
+                if movie.get("poster_path"):
+                    st.image(movie["poster_path"])
+                else:
+                    st.write("No poster available.")
             
-            # Movie title and release year
-            st.write(f"**{movie['title']} ({movie['release_date'][:4]})**")
-            
-            # Rating (converted to percentage)
-            rating_percentage = movie['vote_average'] * 10  # Convert to percentage
-            st.write(f"⭐ Rating: {rating_percentage}%")
+            with col2:
+                st.write(f"🎬 **{movie['title']} ({movie.get('year', 'Unknown')})**")
+                st.write(f"⭐ Rating: {movie.get('rating', 'N/A')}%")
+                st.write(movie.get("overview", "No description available."))
 
-            # Overview of the movie
-            st.write(movie["overview"])
+                # Watch Providers
+                watch_providers = movie.get("watch_providers", {})
+                if watch_providers and any(watch_providers.values()):
+                    st.subheader("Where to Watch:")
+                    if watch_providers["streaming"]:
+                        st.write(f"📺 **Streaming:** {', '.join(watch_providers['streaming'])}")
+                    if watch_providers["rent"]:
+                        st.write(f"💰 **Rent:** {', '.join(watch_providers['rent'])}")
+                    if watch_providers["buy"]:
+                        st.write(f"🛒 **Buy:** {', '.join(watch_providers['buy'])}")
+                else:
+                    st.write("No watch providers available.")
 
-            # Display the availability (rent, buy, streaming service)
-            st.write(f"**Available for:** {movie.get('availability', 'Information not available')}")
-            
-            # Display the streaming service if available
-            st.write(f"**Streaming on:** {movie.get('streaming_service', 'Information not available')}")
-
-            # Display the top-billed cast
-            if 'cast' in movie and 'cast_images' in movie:
-                st.subheader("Top Billed Cast:")
-                for actor, image in zip(movie['cast'], movie['cast_images']):
-                    st.write(f"{actor} - ![Actor Image](https://image.tmdb.org/t/p/w500{image})")
+            # 🎭 Display Top Billed Cast - Carousel
+            cast = movie.get("cast", [])
+            if cast:
+                st.subheader("🎭 Top Billed Cast:")
+                num_columns = min(5, len(cast))
+                cols = st.columns(num_columns)
+                for i, actor in enumerate(cast[:num_columns]):
+                    with cols[i]:
+                        if actor.get("profile_pic"):
+                            st.image(actor["profile_pic"], width=100)
+                        st.write(f"**{actor['name']}**")
+                        st.caption(f"as {actor['character']}")
 
         else:
             st.write("Movie not found.")
-
 
 # 🎭 Personalized Recommendations
 with tab2:
@@ -56,7 +68,14 @@ with tab2:
             recommendations = get_similar_movies(movie["id"])
             if recommendations:
                 for rec in recommendations:
-                    st.write(f"🎬 {rec['title']} ({rec['release_date'][:4]}) - ⭐ {rec['vote_average']}")
+                    col1, col2 = st.columns([1, 3])
+                    with col1:
+                        if rec.get("poster_path"):
+                            st.image(rec["poster_path"])
+                        else:
+                            st.write("No poster available.")
+                    with col2:
+                        st.write(f"🎬 **{rec['title']} ({rec.get('year', 'Unknown')})** - ⭐ {rec.get('rating', 'N/A')}%")
             else:
                 st.write("No similar movies found.")
         else:
@@ -66,15 +85,25 @@ with tab2:
 with tab3:
     st.subheader("Recommend Movies by Genre")
     genre = st.selectbox("Select a Genre", [
-        "Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", 
-        "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery", 
+        "Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary",
+        "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery",
         "Romance", "Science Fiction", "Thriller", "TV Movie", "War", "Western"
     ])
     if st.button("Get Genre Recommendations"):
-        movies = recommender.recommend_by_genre(genre)
-        for _, row in movies.iterrows():
-            st.write(f"🎬 **{row['title']} ({row['year']})** - ⭐ {row['rating']}")
-            st.write(row["description"])
+        movies = get_movies_by_genre(genre)
+        if movies:
+            for movie in movies:
+                col1, col2 = st.columns([1, 3])
+                with col1:
+                    if movie.get("poster_path"):
+                        st.image(movie["poster_path"])
+                    else:
+                        st.write("No poster available.")
+                with col2:
+                    st.write(f"🎬 **{movie['title']} ({movie.get('year', 'Unknown')})** - ⭐ {movie.get('rating', 'N/A')}%")
+                    st.write(movie.get("overview", "No description available."))
+        else:
+            st.write("No movies found for this genre.")
 
 # ⭐ User Ratings & Reviews
 with tab4:
@@ -93,42 +122,42 @@ with tab5:
     if st.button("Give me a movie!"):
         movie = get_random_movie()
         if movie:
-            # Convert vote average to percentage
-            vote_percentage = movie['vote_average'] * 10  # Convert to percentage (0-100)
+            col1, col2 = st.columns([1, 2])
+            with col1:
+                if movie.get("poster_path"):
+                    st.image(movie["poster_path"])
+                else:
+                    st.write("No poster available.")
             
-            # Display movie details
-            st.image(f"https://image.tmdb.org/t/p/w500{movie['poster_path']}")
-            st.write(f"🎬 **{movie['title']} ({movie['release_date'][:4]})** - ⭐ {vote_percentage:.1f}%")
-            st.write(movie["overview"])
-            
-            # Display Watch Providers (Stream, Buy, Rent)
-            if movie.get("watch_providers"):
-                providers = movie["watch_providers"].get("US", {})
-                streaming = providers.get("flatrate", [])
-                rent = providers.get("rent", [])
-                buy = providers.get("buy", [])
-                
-                st.write("🔮 Available on:")
-                
-                if streaming:
-                    st.write("**Streaming:**")
-                    for provider in streaming:
-                        st.write(f"- {provider['provider_name']}")
-                if rent:
-                    st.write("**Available to Rent:**")
-                    for provider in rent:
-                        st.write(f"- {provider['provider_name']}")
-                if buy:
-                    st.write("**Available to Buy:**")
-                    for provider in buy:
-                        st.write(f"- {provider['provider_name']}")
-            
-            # Display Top-Billed Cast
-            if movie.get("cast"):
-                st.write("👨‍👩‍👧‍👦 Top Cast:")
-                for cast_member in movie["cast"]:
-                    st.image(f"https://image.tmdb.org/t/p/w500{cast_member['profile_path']}", width=50)
-                    st.write(f"**{cast_member['name']}** as {cast_member['character']}")
+            with col2:
+                st.write(f"🎬 **{movie['title']} ({movie.get('year', 'Unknown')})** - ⭐ {movie.get('rating', 'N/A')}%")
+                st.write(movie.get("overview", "No description available."))
+
+                # Watch Providers
+                watch_providers = movie.get("watch_providers", {})
+                if watch_providers and any(watch_providers.values()):
+                    st.subheader("Where to Watch:")
+                    if watch_providers["streaming"]:
+                        st.write(f"📺 **Streaming:** {', '.join(watch_providers['streaming'])}")
+                    if watch_providers["rent"]:
+                        st.write(f"💰 **Rent:** {', '.join(watch_providers['rent'])}")
+                    if watch_providers["buy"]:
+                        st.write(f"🛒 **Buy:** {', '.join(watch_providers['buy'])}")
+                else:
+                    st.write("No watch providers available.")
+
+            # 🎭 Display Top Billed Cast - Carousel
+            cast = movie.get("cast", [])
+            if cast:
+                st.subheader("🎭 Top Billed Cast:")
+                num_columns = min(5, len(cast))
+                cols = st.columns(num_columns)
+                for i, actor in enumerate(cast[:num_columns]):
+                    with cols[i]:
+                        if actor.get("profile_pic"):
+                            st.image(actor["profile_pic"], width=100)
+                        st.write(f"**{actor['name']}**")
+                        st.caption(f"as {actor['character']}")
+
         else:
             st.write("Couldn't fetch a random movie.")
-
