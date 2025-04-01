@@ -17,12 +17,34 @@ with tab1:
     if st.button("Search"):
         movie = search_movie(movie_name)
         if movie:
+            # Display movie poster
             st.image(f"https://image.tmdb.org/t/p/w500{movie['poster_path']}")
+            
+            # Movie title and release year
             st.write(f"**{movie['title']} ({movie['release_date'][:4]})**")
-            st.write(f"⭐ Rating: {movie['vote_average']}")
+            
+            # Rating (converted to percentage)
+            rating_percentage = movie['vote_average'] * 10  # Convert to percentage
+            st.write(f"⭐ Rating: {rating_percentage}%")
+
+            # Overview of the movie
             st.write(movie["overview"])
+
+            # Display the availability (rent, buy, streaming service)
+            st.write(f"**Available for:** {movie.get('availability', 'Information not available')}")
+            
+            # Display the streaming service if available
+            st.write(f"**Streaming on:** {movie.get('streaming_service', 'Information not available')}")
+
+            # Display the top-billed cast
+            if 'cast' in movie and 'cast_images' in movie:
+                st.subheader("Top Billed Cast:")
+                for actor, image in zip(movie['cast'], movie['cast_images']):
+                    st.write(f"{actor} - ![Actor Image](https://image.tmdb.org/t/p/w500{image})")
+
         else:
             st.write("Movie not found.")
+
 
 # 🎭 Personalized Recommendations
 with tab2:
