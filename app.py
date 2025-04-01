@@ -8,7 +8,7 @@ st.title("🎬 Smart Movie Recommender")
 recommender = MovieRecommender()
 
 # Tabs for different features
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["🔍 Search", "🎭 Personalized", "🎥 Genre", "⭐ Ratings", "🎲 Surprise Me"])
+tab1, tab2, tab3, tab4 = st.tabs(["🔍 Search", "🎭 Personalized", "🎥 Genre", "🎲 Surprise Me"])
 
 # 🔍 Movie Search
 with tab1:
@@ -105,19 +105,10 @@ with tab3:
         else:
             st.write("No movies found for this genre.")
 
-# ⭐ User Ratings & Reviews
-with tab4:
-    st.subheader("Rate a Movie")
-    movie_to_rate = st.text_input("Enter a movie title to rate")
-    rating = st.slider("Select Rating", 1, 5, 3)
-    if st.button("Submit Rating"):
-        st.write(recommender.rate_movie(movie_to_rate, rating))
 
-    st.subheader("Your Top Rated Movies")
-    st.write(recommender.get_top_rated())
 
 # 🎲 Surprise Me!
-with tab5:
+with tab4:
     st.subheader("Surprise Me with a Random Movie!")
     if st.button("Give me a movie!"):
         movie = get_random_movie()
