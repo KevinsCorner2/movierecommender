@@ -73,11 +73,8 @@ with tab3:
     if st.button("Get Genre Recommendations"):
         movies = recommender.recommend_by_genre(genre)
         for _, row in movies.iterrows():
-            # Display movie details (including rating as percentage)
-            rating_percentage = row["rating"] * 10  # Convert rating to percentage
-            st.write(f"🎬 **{row['title']} ({row['year']})** - ⭐ {rating_percentage}%")
+            st.write(f"🎬 **{row['title']} ({row['year']})** - ⭐ {row['rating']}")
             st.write(row["description"])
-
 
 # ⭐ User Ratings & Reviews
 with tab4:
