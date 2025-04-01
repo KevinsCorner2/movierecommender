@@ -22,3 +22,7 @@ def get_random_movie():
     response = requests.get(url).json()
     from random import choice
     return choice(response["results"]) if response["results"] else None
+
+
+
+
