@@ -26,7 +26,7 @@ with tab1:
             
             with col2:
                 st.write(f"🎬 **{movie['title']} ({movie.get('year', 'Unknown')})**")
-                st.write(f"⭐ Rating: {movie.get('rating', 'N/A')}%")
+                st.write(f"⭐ Rating: {movie.get('rating', 'N/A')}")
                 st.write(movie.get("overview", "No description available."))
 
                 # Watch Providers
@@ -75,7 +75,7 @@ with tab2:
                         else:
                             st.write("No poster available.")
                     with col2:
-                        st.write(f"🎬 **{rec['title']} ({rec.get('year', 'Unknown')})** - ⭐ {rec.get('rating', 'N/A')}%")
+                        st.write(f"🎬 **{rec['title']} ({rec.get('year', 'Unknown')})** - ⭐ {rec.get('rating', 'N/A')}")
             else:
                 st.write("No similar movies found.")
         else:
@@ -100,7 +100,7 @@ with tab3:
                     else:
                         st.write("No poster available.")
                 with col2:
-                    st.write(f"🎬 **{movie['title']} ({movie.get('year', 'Unknown')})** - ⭐ {movie.get('rating', 'N/A')}%")
+                    st.write(f"🎬 **{movie['title']} ({movie.get('year', 'Unknown')})** - ⭐ {movie.get('rating', 'N/A')}")
                     st.write(movie.get("overview", "No description available."))
         else:
             st.write("No movies found for this genre.")
@@ -121,7 +121,7 @@ with tab4:
                     st.write("No poster available.")
             
             with col2:
-                st.write(f"🎬 **{movie['title']} ({movie.get('year', 'Unknown')})** - ⭐ {movie.get('rating', 'N/A')}%")
+                st.write(f"🎬 **{movie['title']} ({movie.get('year', 'Unknown')})** - ⭐ {movie.get('rating', 'N/A')}")
                 st.write(movie.get("overview", "No description available."))
 
                 # Watch Providers
