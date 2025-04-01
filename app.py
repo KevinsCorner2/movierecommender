@@ -2,7 +2,7 @@ import streamlit as st
 from movie_recommender import MovieRecommender
 from tmdb_api import search_movie, get_similar_movies, get_random_movie, get_movies_by_genre
 
-# PEP 8: Use two blank lines between top-level function and class definitions
+
 st.title("🎬 Smart Movie Recommender")
 
 # Initialize movie recommender
@@ -20,10 +20,10 @@ with tab1:
         movie = search_movie(movie_name)
         
         if movie:
-            col1, col2 = st.columns([1, 2])  # PEP 8: Keep line lengths ≤ 79 characters for readability
+            col1, col2 = st.columns([1, 2])  
             
             with col1:
-                if movie.get("poster_path"):  # PEP 8: Use .get() to avoid KeyError
+                if movie.get("poster_path"):  #Use .get() to avoid KeyError
                     st.image(movie["poster_path"])
                 else:
                     st.write("No poster available.")
@@ -52,18 +52,18 @@ with tab1:
 
             if cast:
                 st.subheader("🎭 Top Billed Cast:")
-                num_columns = min(5, len(cast))  # PEP 8: Avoid magic numbers
+                num_columns = min(5, len(cast))  #Avoid magic numbers
                 cols = st.columns(num_columns)
 
                 for i, actor in enumerate(cast[:num_columns]):
                     with cols[i]:
                         if actor.get("profile_pic"):
-                            st.image(actor["profile_pic"], width=100)  # PEP 8: Consistent indentation
+                            st.image(actor["profile_pic"], width=100)  #Consistent indentation
                         st.write(f"**{actor['name']}**")
                         st.caption(f"as {actor['character']}")
 
         else:
-            st.write("Movie not found.")  # PEP 8: Keep error messages user-friendly
+            st.write("Movie not found.")  #Keep error messages user-friendly
 
 # 🎭 Personalized Recommendations
 with tab2:
@@ -102,7 +102,7 @@ with tab3:
         "Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary",
         "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery",
         "Romance", "Science Fiction", "Thriller", "TV Movie", "War", "Western"
-    ])  # PEP 8: Align multiline lists properly
+    ])  #Align multiline lists properly
     
     if st.button("Get Genre Recommendations"):
         movies = get_movies_by_genre(genre)
@@ -173,4 +173,4 @@ with tab4:
                         st.caption(f"as {actor['character']}")
 
         else:
-            st.write("Couldn't fetch a random movie.")  # PEP 8: Keep error messages brief and clear
+            st.write("Couldn't fetch a random movie.")  #Keep error messages brief and clear
