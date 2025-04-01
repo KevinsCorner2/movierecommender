@@ -2,6 +2,7 @@ import streamlit as st
 from movie_recommender import MovieRecommender
 from tmdb_api import search_movie, get_similar_movies, get_random_movie, get_movies_by_genre
 
+# PEP 8: Use two blank lines between top-level function and class definitions
 st.title("🎬 Smart Movie Recommender")
 
 # Initialize movie recommender
@@ -14,12 +15,15 @@ tab1, tab2, tab3, tab4 = st.tabs(["🔍 Search", "🎭 Personalized", "🎥 Genr
 with tab1:
     st.subheader("Search for a Movie")
     movie_name = st.text_input("Enter a movie name")
+    
     if st.button("Search"):
         movie = search_movie(movie_name)
+        
         if movie:
-            col1, col2 = st.columns([1, 2])
+            col1, col2 = st.columns([1, 2])  # PEP 8: Keep line lengths ≤ 79 characters for readability
+            
             with col1:
-                if movie.get("poster_path"):
+                if movie.get("poster_path"):  # PEP 8: Use .get() to avoid KeyError
                     st.image(movie["poster_path"])
                 else:
                     st.write("No poster available.")
@@ -31,51 +35,60 @@ with tab1:
 
                 # Watch Providers
                 watch_providers = movie.get("watch_providers", {})
+
                 if watch_providers and any(watch_providers.values()):
                     st.subheader("Where to Watch:")
-                    if watch_providers["streaming"]:
+                    if watch_providers.get("streaming"):
                         st.write(f"📺 **Streaming:** {', '.join(watch_providers['streaming'])}")
-                    if watch_providers["rent"]:
+                    if watch_providers.get("rent"):
                         st.write(f"💰 **Rent:** {', '.join(watch_providers['rent'])}")
-                    if watch_providers["buy"]:
+                    if watch_providers.get("buy"):
                         st.write(f"🛒 **Buy:** {', '.join(watch_providers['buy'])}")
                 else:
                     st.write("No watch providers available.")
 
             # 🎭 Display Top Billed Cast - Carousel
             cast = movie.get("cast", [])
+
             if cast:
                 st.subheader("🎭 Top Billed Cast:")
-                num_columns = min(5, len(cast))
+                num_columns = min(5, len(cast))  # PEP 8: Avoid magic numbers
                 cols = st.columns(num_columns)
+
                 for i, actor in enumerate(cast[:num_columns]):
                     with cols[i]:
                         if actor.get("profile_pic"):
-                            st.image(actor["profile_pic"], width=100)
+                            st.image(actor["profile_pic"], width=100)  # PEP 8: Consistent indentation
                         st.write(f"**{actor['name']}**")
                         st.caption(f"as {actor['character']}")
 
         else:
-            st.write("Movie not found.")
+            st.write("Movie not found.")  # PEP 8: Keep error messages user-friendly
 
 # 🎭 Personalized Recommendations
 with tab2:
     st.subheader("Get Recommendations Based on Your Favorite Movie")
     favorite_movie = st.text_input("Enter a favorite movie")
+
     if st.button("Recommend Similar"):
         movie = search_movie(favorite_movie)
+        
         if movie:
             recommendations = get_similar_movies(movie["id"])
+            
             if recommendations:
                 for rec in recommendations:
                     col1, col2 = st.columns([1, 3])
+                    
                     with col1:
                         if rec.get("poster_path"):
                             st.image(rec["poster_path"])
                         else:
                             st.write("No poster available.")
+                    
                     with col2:
                         st.write(f"🎬 **{rec['title']} ({rec.get('year', 'Unknown')})** - ⭐ {rec.get('rating', 'N/A')}")
+
             else:
                 st.write("No similar movies found.")
         else:
@@ -84,36 +97,42 @@ with tab2:
 # 🎥 Genre-Based Recommendations
 with tab3:
     st.subheader("Recommend Movies by Genre")
+    
     genre = st.selectbox("Select a Genre", [
         "Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary",
         "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery",
         "Romance", "Science Fiction", "Thriller", "TV Movie", "War", "Western"
-    ])
+    ])  # PEP 8: Align multiline lists properly
+    
     if st.button("Get Genre Recommendations"):
         movies = get_movies_by_genre(genre)
+        
         if movies:
             for movie in movies:
                 col1, col2 = st.columns([1, 3])
+                
                 with col1:
                     if movie.get("poster_path"):
                         st.image(movie["poster_path"])
                     else:
                         st.write("No poster available.")
+                
                 with col2:
                     st.write(f"🎬 **{movie['title']} ({movie.get('year', 'Unknown')})** - ⭐ {movie.get('rating', 'N/A')}")
                     st.write(movie.get("overview", "No description available."))
         else:
             st.write("No movies found for this genre.")
 
-
-
 # 🎲 Surprise Me!
 with tab4:
     st.subheader("Surprise Me with a Random Movie!")
+    
     if st.button("Give me a movie!"):
         movie = get_random_movie()
+        
         if movie:
             col1, col2 = st.columns([1, 2])
+            
             with col1:
                 if movie.get("poster_path"):
                     st.image(movie["poster_path"])
@@ -126,23 +145,26 @@ with tab4:
 
                 # Watch Providers
                 watch_providers = movie.get("watch_providers", {})
+                
                 if watch_providers and any(watch_providers.values()):
                     st.subheader("Where to Watch:")
-                    if watch_providers["streaming"]:
+                    if watch_providers.get("streaming"):
                         st.write(f"📺 **Streaming:** {', '.join(watch_providers['streaming'])}")
-                    if watch_providers["rent"]:
+                    if watch_providers.get("rent"):
                         st.write(f"💰 **Rent:** {', '.join(watch_providers['rent'])}")
-                    if watch_providers["buy"]:
+                    if watch_providers.get("buy"):
                         st.write(f"🛒 **Buy:** {', '.join(watch_providers['buy'])}")
                 else:
                     st.write("No watch providers available.")
 
             # 🎭 Display Top Billed Cast - Carousel
             cast = movie.get("cast", [])
+            
             if cast:
                 st.subheader("🎭 Top Billed Cast:")
                 num_columns = min(5, len(cast))
                 cols = st.columns(num_columns)
+
                 for i, actor in enumerate(cast[:num_columns]):
                     with cols[i]:
                         if actor.get("profile_pic"):
@@ -151,4 +173,4 @@ with tab4:
                         st.caption(f"as {actor['character']}")
 
         else:
-            st.write("Couldn't fetch a random movie.")
+            st.write("Couldn't fetch a random movie.")  # PEP 8: Keep error messages brief and clear
