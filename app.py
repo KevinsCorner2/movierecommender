@@ -5,10 +5,10 @@ from tmdb_api import search_movie, get_similar_movies, get_random_movie, get_mov
 # Inject custom CSS for fancy fonts and layout styling
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
 
     html, body, [class*="css"] {
-        font-family: 'Montserrat', sans-serif;
+        font-family: "Josefin Sans", sans-serif;
         background-color: #1c1f26;
         color: #e5e5e5;
     }
