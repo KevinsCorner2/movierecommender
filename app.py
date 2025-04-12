@@ -5,50 +5,38 @@ from tmdb_api import search_movie, get_similar_movies, get_random_movie, get_mov
 # Inject custom CSS for fancy fonts and layout styling
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
     html, body, [class*="css"] {
         font-family: 'Montserrat', sans-serif;
-        background-color: #0f1117;
+        background-color: #1c1f26;
         color: #e5e5e5;
     }
 
     h1, h2, h3, h4 {
-        color: #f9a825;
+        color: #dc1f26;
     }
 
     .stButton>button {
-        background-color: #f9a825;
-        color: black;
+        background-color: #dc1f26;
+        color: white;
         font-weight: bold;
         border-radius: 8px;
         padding: 0.5em 1em;
-        transition: all 0.2s ease;
+        transition: background-color 0.3s ease;
     }
 
     .stButton>button:hover {
-        background-color: #ffd54f;
-        color: black;
-        transform: scale(1.05);
+        background-color: #a81b1f;
     }
 
     .stImage>img {
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        transition: transform 0.2s ease;
-    }
-
-    .stImage>img:hover {
-        transform: scale(1.03);
-    }
-
-    .stTabs [role="tab"] {
-        font-size: 18px;
-        font-weight: bold;
     }
 
     .stSelectbox, .stTextInput {
-        background-color: #1c1f26 !important;
+        background-color: #2c2f36 !important;
         color: #e5e5e5 !important;
         border-radius: 8px;
     }
