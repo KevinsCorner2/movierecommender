@@ -73,7 +73,7 @@ with tab1:
         if movie:
             col1, col2 = st.columns([1, 2])
             with col1:
-                st.image(movie.get("poster_path", ""), use_column_width=True)
+                st.image(movie.get("poster_path", ""), use_container_width=True)
             with col2:
                 st.markdown(f"### 🎬 {movie['title']} ({movie.get('year', 'Unknown')})")
                 st.write(f"⭐ **Rating:** {movie.get('rating', 'N/A')}")
@@ -116,7 +116,7 @@ with tab2:
                 for rec in recommendations:
                     col1, col2 = st.columns([1, 3])
                     with col1:
-                        st.image(rec.get("poster_path", ""), use_column_width=True)
+                        st.image(rec.get("poster_path", ""), use_container_width=True)
                     with col2:
                         st.markdown(f"### 🎬 {rec['title']} ({rec.get('year', 'Unknown')})")
                         st.write(f"⭐ {rec.get('rating', 'N/A')}")
@@ -140,7 +140,7 @@ with tab3:
             for movie in movies:
                 col1, col2 = st.columns([1, 3])
                 with col1:
-                    st.image(movie.get("poster_path", ""), use_column_width=True)
+                    st.image(movie.get("poster_path", ""), use_container_widthh=True)
                 with col2:
                     st.markdown(f"### 🎬 {movie['title']} ({movie.get('year', 'Unknown')})")
                     st.write(f"⭐ {movie.get('rating', 'N/A')}")
@@ -156,7 +156,7 @@ with tab4:
         if movie:
             col1, col2 = st.columns([1, 2])
             with col1:
-                st.image(movie.get("poster_path", ""), use_column_width=True)
+                st.image(movie.get("poster_path", ""), use_container_width=True)
             with col2:
                 st.markdown(f"### 🎬 {movie['title']} ({movie.get('year', 'Unknown')})")
                 st.write(f"⭐ {movie.get('rating', 'N/A')}")
