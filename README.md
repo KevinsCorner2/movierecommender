@@ -20,3 +20,6 @@ movies.csv
 - The code used to pull from a spreadsheet, but since updating to pull from the database itself, it's no longer used but is still available for those who want to use this code.
 
 to run: clone the repository and once you have opened your terminal, type "python -m streamlit run app.py"
+
+
+https://movierecomende.streamlit.app/
